@@ -1,0 +1,6 @@
+firebase-admin
+requests
+streamlit-autorefresh==1.0.1
+streamlit
+   streamlit-autorefresh
+   firebase-admin
