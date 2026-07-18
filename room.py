@@ -48,3 +48,15 @@ def join_room(room_code, player_name):
 def get_room(room_code):
     """Room ka current data return karta hai"""
     return load_room(room_code)
+
+def leave_room(room_code, player_name):
+    """Player ko room se nikalta hai"""
+    room = load_room(room_code)
+    if room is None:
+        return False, "Room mojood nahi hai!"
+    if player_name in room["players"]:
+        room["players"].remove(player_name)
+    if player_name in room.get("scores", {}):
+        del room["scores"][player_name]
+    save_room(room_code, room)
+    return True, "Room chhod diya!"

@@ -5,7 +5,7 @@ import json
 import base64
 import time
 from streamlit_autorefresh import st_autorefresh
-from room import create_room, join_room, get_room
+from room import create_room, join_room, get_room, leave_room
 from game import (
     check_and_start_game, get_player_role, get_reveal_info,
     get_hidden_players, submit_guess, is_guess_correct,
@@ -634,6 +634,12 @@ else:
         st.markdown(f"{get_avatar_html(p)} **{p}**", unsafe_allow_html=True)
 
     st.write(f"({len(room['players'])}/4 players joined)")
+    if not room.get("game_started", False):
+        if st.button("🚪 Leave Room"):
+            leave_room(st.session_state.room_code, st.session_state.player_name)
+            st.session_state.joined = False
+            st.session_state.room_code = ""
+            st.rerun()
 
     # ---------- SMART AUTO-REFRESH ----------
     should_autorefresh = True
@@ -675,6 +681,12 @@ else:
                     f"**#{rank}.** {get_avatar_html(player)} **{player}**: {score} points",
                     unsafe_allow_html=True
                 )
+            st.divider()
+            if st.button("🚪 Leave Room", key="leave_after_game"):
+                leave_room(st.session_state.room_code, st.session_state.player_name)
+                st.session_state.joined = False
+                st.session_state.room_code = ""
+                st.rerun()
 
         else:
             st.write(f"### Round {room['current_round']} / {room['total_rounds']}")
