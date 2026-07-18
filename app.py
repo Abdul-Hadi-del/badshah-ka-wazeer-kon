@@ -792,8 +792,10 @@ else:
 
                 if not room.get("scores_calculated", False):
                     calculate_scores(st.session_state.room_code, correct)
+                    room = get_room(st.session_state.room_code)
                     room["scores_calculated"] = True
                     save_room(st.session_state.room_code, room)
+
 
                 st.divider()
                 st.subheader("📊 Scoreboard")
